@@ -1,0 +1,12 @@
+.hidden {
+  display: none;
+}
+
+#buttonflex {
+  display: flex;
+  justify-content: center;
+}
+
+div.columns {
+  justify-content: center;
+}
