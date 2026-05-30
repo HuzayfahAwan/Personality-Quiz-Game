@@ -1,612 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fuzzy Personality Quiz</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-    />
-    <link rel="stylesheet" href="style.css" type="text/css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fuzzy Personality Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-  <body>
-    <!-- Header Code -->
-    <section
-      class="hero has-background-grey-darker notification has-text-danger-light has-text-centered"
-    >
-      <div class="hero-body">
-        <p class="title">Fuzzy Personality Quiz</p>
-        <p class="subtitle">
-          Answer each question to find out which personality type you are.
-        </p>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Header -->
+  <header class="quiz-header">
+    <span class="quiz-emoji">✨</span>
+    <h1 class="quiz-title">Fuzzy Personality Quiz</h1>
+    <p class="quiz-subtitle">Answer 7 quick questions to discover your unique personality type</p>
+  </header>
+
+  <!-- Progress bar -->
+  <div class="progress-section" id="progress-section">
+    <div class="progress-header">
+      <span class="progress-label">Question <span id="current-q">1</span> of 7</span>
+      <span class="progress-pct" id="progress-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="step-dots">
+      <div class="step-dot active"  id="dot-1"></div>
+      <div class="step-dot"         id="dot-2"></div>
+      <div class="step-dot"         id="dot-3"></div>
+      <div class="step-dot"         id="dot-4"></div>
+      <div class="step-dot"         id="dot-5"></div>
+      <div class="step-dot"         id="dot-6"></div>
+      <div class="step-dot"         id="dot-7"></div>
+    </div>
+  </div>
+
+  <!-- Quiz questions -->
+  <main class="quiz-container" id="quiz-container">
+
+    <!-- Q1: Color -->
+    <section class="question active" id="q-color">
+      <div class="question-header">
+        <span class="q-number">1</span>
+        <h2 class="question-title">Pick a favorite color</h2>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-card" id="color-0">
+          <div class="answer-img-wrap">
+            <img src="https://media.architecturaldigest.com/photos/5ba551bb44966b64d8d5fc2b/4:3/w_3868,h_2901,c_limit/hyper-blue-4.jpg" alt="Blue" loading="lazy">
+          </div>
+          <div class="answer-label">Blue</div>
+        </div>
+        <div class="answer-card" id="color-1">
+          <div class="answer-img-wrap">
+            <img src="https://healthyfamilyproject.com/wp-content/uploads/2020/05/Oranges-background.jpg" alt="Orange" loading="lazy">
+          </div>
+          <div class="answer-label">Orange</div>
+        </div>
+        <div class="answer-card" id="color-2">
+          <div class="answer-img-wrap">
+            <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-1.2.1&w=800&q=80" alt="Brown" loading="lazy">
+          </div>
+          <div class="answer-label">Brown</div>
+        </div>
+        <div class="answer-card" id="color-3">
+          <div class="answer-img-wrap">
+            <img src="https://76crb34usu-flywheel.netdna-ssl.com/wp-content/uploads/2016/12/tomatoes_Things_that_are_red.jpg" alt="Red" loading="lazy">
+          </div>
+          <div class="answer-label">Red</div>
+        </div>
       </div>
     </section>
 
-    <!-- Body Code -->
-    <div class="container has-text-centered">
-      <!-- Question 1 -->
-      <section class="section firstQ">
-        <h1 class="title">Pick a favorite color.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="color-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://media.architecturaldigest.com/photos/5ba551bb44966b64d8d5fc2b/4:3/w_3868,h_2901,c_limit/hyper-blue-4.jpg"
-                    alt="blue"
-                  />
-                </div>
-                <div class="subtitle">Blue</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="color-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://healthyfamilyproject.com/wp-content/uploads/2020/05/Oranges-background.jpg"
-                    alt="orange"
-                  />
-                </div>
-                <div class="subtitle">Orange</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="color-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y29mZmVlJTIwYmVhbnxlbnwwfHwwfHw%3D&w=1000&q=80"
-                    alt="brown"
-                  />
-                </div>
-                <div class="subtitle">Brown</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="color-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://76crb34usu-flywheel.netdna-ssl.com/wp-content/uploads/2016/12/tomatoes_Things_that_are_red.jpg"
-                    alt="red"
-                  />
-                </div>
-                <div class="subtitle">Red</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Question 2 -->
-      <section class="section otherQ">
-        <h1 class="title">Pick a favorite vacation spot.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="vacation-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://www.alaskanatureguides.com/images/denali_1.jpg"
-                    alt="Alaska"
-                  />
-                </div>
-                <div class="subtitle">Alaska</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="vacation-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://www.areyouready.tv/wp-content/uploads/2020/06/Man-on-the-moon-702x459-1.jpg"
-                    alt="space"
-                  />
-                </div>
-                <div class="subtitle">Space</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="vacation-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://i.pinimg.com/originals/47/73/44/477344c852a37407bd11e367ce9a2d1e.jpg"
-                    alt="New Orleans"
-                  />
-                </div>
-                <div class="subtitle">New Orleans</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="vacation-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://homedesignlover.com/wp-content/uploads/2012/03/2-ladies-minimal.jpg"
-                    alt="Staycation Bedroom"
-                  />
-                </div>
-                <div class="subtitle">Staycation</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Question 3 -->
-      <section class="section otherQ">
-        <h1 class="title">Pick a favorite pizza.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="pizza-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://img.sunset02.com/sites/default/files/styles/marquee_large_2x/public/image/recipes/su/10/02/pizzetta-margherita-pizza-su-x.jpg"
-                    alt="Margherita"
-                  />
-                </div>
-                <div class="subtitle">Margherita</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="pizza-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://tmbidigitalassetsazure.blob.core.windows.net/rms3-prod/attachments/37/1200x1200/Grilled-Veggie-Pizza_EXPS_LSBZ18_48960_D01_18_6b.jpg"
-                    alt="veggie"
-                  />
-                </div>
-                <div class="subtitle">Veggie</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="pizza-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://d332juqdd9b8hn.cloudfront.net/wp-content/uploads/2019/07/GettyImages-487260560.jpg"
-                    alt="Pineapple"
-                  />
-                </div>
-                <div class="subtitle">Pineapple</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="pizza-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://yeadonpizza.com/wp-content/uploads/2020/08/plain-pizza.jpg"
-                    alt="plain"
-                  />
-                </div>
-                <div class="subtitle">Plain</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Question 4 -->
-      <section class="section otherQ">
-        <h1 class="title">Pick a dream house.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="house-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://nationalmortgageprofessional.com/sites/default/files/2015-04/ThinkstockPhotos-176836910_0.jpg"
-                    alt="farm house"
-                  />
-                </div>
-                <div class="subtitle">Farm House</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="house-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://empire-s3-production.bobvila.com/slides/35863/vertical_slide_wide/tiny_new_york_apartments.jpg?1581523935"
-                    alt="city apartment"
-                  />
-                </div>
-                <div class="subtitle">City Apartment</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="house-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://architecturesstyle.com/wp-content/uploads/2021/01/suburban-house-ideas-9.jpeg"
-                    alt="suburban house"
-                  />
-                </div>
-                <div class="subtitle">Suburban House</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="house-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://media-cldnry.s-nbcnews.com/image/upload/newscms/2021_16/3466983/210422-florida-wedding-mb-1802.jpg"
-                    alt="mansion"
-                  />
-                </div>
-                <div class="subtitle">Mansion</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Question 5 -->
-      <section class="section otherQ">
-        <h1 class="title">Pick a favorite fruit.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="fruit-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://www.nipponexpress.com/press/report/img/06-Nov-20-ogp.jpeg"
-                    alt="banana"
-                  />
-                </div>
-                <div class="subtitle">Banana</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="fruit-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://assets.bonappetit.com/photos/5cfa7e1fdf8e95e1e62ca6a3/5:4/w_3515,h_2812,c_limit/Basically-Strawberry-Shortcake-Strawberries.jpg"
-                    alt="Strawberry"
-                  />
-                </div>
-                <div class="subtitle">Strawberry</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="fruit-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://i0.wp.com/www.streetsmartkitchen.com/wp-content/uploads/Red-apples.jpg?resize=790%2C593&ssl=1"
-                    alt="apple"
-                  />
-                </div>
-                <div class="subtitle">Apple</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="fruit-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5Fn-c5lOWe8xWpwkQ8Kw3C3RF01fc-KXOug&usqp=CAU"
-                    alt="mango"
-                  />
-                </div>
-                <div class="subtitle">Mango</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Question 6 -->
-      <section class="section otherQ">
-        <h1 class="title">Pick a favorite activity.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="activity-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://a.cdn-hotels.com/gdcs/production179/d586/cc1389d9-c3fd-40db-bbd7-29687b844fa9.jpg"
-                    alt="mall with friends"
-                  />
-                </div>
-                <div class="subtitle">Mall with Friends</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="activity-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://www.filmink.com.au/wp-content/uploads/2019/07/netflix-4011345_1280-793x528.jpg"
-                    alt="binge watching"
-                  />
-                </div>
-                <div class="subtitle">Binge Watching</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="activity-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://newsela.imgix.net/article_media/2020/03/board-games-coronavirus-b59be246.jpg?auto=compress%2C%20enhance&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.57&fp-z=1&ar=16%3A9&q=50"
-                    alt="gaming"
-                  />
-                </div>
-                <div class="subtitle">Gaming</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="activity-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://s3.amazonaws.com/zenplannerwordpress-stack0/wp-content/uploads/sites/598/2022/01/26072906/female-rhapsody-fitness-member-focuses-wod.jpg"
-                    alt="gym"
-                  />
-                </div>
-                <div class="subtitle">Gym</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Question 7 -->
-      <section class="section otherQ">
-        <h1 class="title">Pick a favorite comic book character.</h1>
-        <!-- Answer Choices -->
-        <div class="container">
-          <div class="columns">
-            <!-- A -->
-            <div class="column has-text-centered">
-              <figure
-                id="comic-0"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://cdn-images.win.gg/resize/w/1000/format/webp/type/progressive/fit/cover/path/wp/uploads/2022/07/marvels-spiderman-remastered-screenshot-01-disclaimer-en-01oct20.webp"
-                    alt="Spider-Man"
-                  />
-                </div>
-                <div class="subtitle">Spider-Man</div>
-              </figure>
-            </div>
-            <!-- B -->
-            <div class="column has-text-centered">
-              <figure
-                id="comic-1"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://static.wikia.nocookie.net/batman/images/d/d3/The_Batman_-_Batman.jpg"
-                    alt="Batman"
-                  />
-                </div>
-                <div class="subtitle">Batman</div>
-              </figure>
-            </div>
-            <!-- C -->
-            <div class="column has-text-centered">
-              <figure
-                id="comic-2"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://static.wikia.nocookie.net/listofdeaths/images/1/14/Bucky_Barnes-Winter_Soldier.jpg"
-                    alt="The Winter Soldier"
-                  />
-                </div>
-                <div class="subtitle">The Winter Soldier</div>
-              </figure>
-            </div>
-            <!-- D -->
-            <div class="column has-text-centered">
-              <figure
-                id="comic-3"
-                class="card-image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img
-                    src="https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg"
-                    alt="Iron Man"
-                  />
-                </div>
-                <div class="subtitle">Iron Man</div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Final Answer 1 (-, -) -->
-      <section id="logical-introvert" class="section hidden">
-        <div class="container">
-          <h1 class="title">You are a Philospher!</h1>
-          <div class="columns">
-            <div class="column has-text-centered">
-              <figure
-                class="image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img src="https://images.theconversation.com/files/257265/original/file-20190205-86202-19tymqj.jpg" alt="Philospher" />
-                </div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Final Answer 2 (-, +) -->
-      <section id="logical-extrovert" class="section hidden">
-        <div class="container">
-          <h1 class="title">You are a Group Leader!</h1>
-          <div class="columns">
-            <div class="column has-text-centered">
-              <figure
-                class="image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img src="https://img.etimg.com/thumb/msid-66234375,width-640,resizemode-4,imgsize-203544/building-strong-relationships.jpg" alt="Group Leader" />
-                </div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Final Answer 3 (+, -) -->
-      <section id="creative-introvert" class="section hidden">
-        <div class="container">
-          <h1 class="title">You are a Day Dreamer!</h1>
-          <div class="columns">
-            <div class="column has-text-centered">
-              <figure
-                class="image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img src="https://cdn.mos.cms.futurecdn.net/htCqa6jYJnEShpo8htHVDd-1200-80.jpg" alt="Day Dreamer" />
-                </div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Final Answer 4 (+, +) -->
-      <section id="creative-extrovert" class="section hidden">
-        <div class="container">
-          <h1 class="title">You are a Performing Artist!</h1>
-          <div class="columns">
-            <div class="column has-text-centered">
-              <figure
-                class="image card notification has-background-light is-inline-block"
-              >
-                <div class="container">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Two_dancers.jpg/220px-Two_dancers.jpg" alt="Performing Artist" />
-                </div>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div id="buttonflex">
-      <a href="https://day-9-fuzzy-personality-quiz.huzayfahawan.repl.co/">
-        <button id="retake" class="hidden" type="button" style="font-size: 20px;">
-          Retake Quiz!
-        </button>
-      </a>
-    </div>
-    
-    <!-- Footer Code -->
-    <footer
-      class="footer has-background-grey-darker notification has-text-danger-light mt-5 mb-0"
-    >
-      <div class="content has-text-centered">
-        <p class="subtitle">Thanks for playing!</p>
+    <!-- Q2: Vacation -->
+    <section class="question" id="q-vacation">
+      <div class="question-header">
+        <span class="q-number">2</span>
+        <h2 class="question-title">Pick a favorite vacation spot</h2>
       </div>
-    </footer>
+      <div class="answer-grid">
+        <div class="answer-card" id="vacation-0">
+          <div class="answer-img-wrap">
+            <img src="https://www.alaskanatureguides.com/images/denali_1.jpg" alt="Alaska" loading="lazy">
+          </div>
+          <div class="answer-label">Alaska</div>
+        </div>
+        <div class="answer-card" id="vacation-1">
+          <div class="answer-img-wrap">
+            <img src="https://www.areyouready.tv/wp-content/uploads/2020/06/Man-on-the-moon-702x459-1.jpg" alt="Space" loading="lazy">
+          </div>
+          <div class="answer-label">Space</div>
+        </div>
+        <div class="answer-card" id="vacation-2">
+          <div class="answer-img-wrap">
+            <img src="https://i.pinimg.com/originals/47/73/44/477344c852a37407bd11e367ce9a2d1e.jpg" alt="New Orleans" loading="lazy">
+          </div>
+          <div class="answer-label">New Orleans</div>
+        </div>
+        <div class="answer-card" id="vacation-3">
+          <div class="answer-img-wrap">
+            <img src="https://homedesignlover.com/wp-content/uploads/2012/03/2-ladies-minimal.jpg" alt="Staycation" loading="lazy">
+          </div>
+          <div class="answer-label">Staycation</div>
+        </div>
+      </div>
+    </section>
 
-    <script src="script.js" type="text/javascript" defer></script>
-  </body>
+    <!-- Q3: Pizza -->
+    <section class="question" id="q-pizza">
+      <div class="question-header">
+        <span class="q-number">3</span>
+        <h2 class="question-title">Pick a favorite pizza</h2>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-card" id="pizza-0">
+          <div class="answer-img-wrap">
+            <img src="https://img.sunset02.com/sites/default/files/styles/marquee_large_2x/public/image/recipes/su/10/02/pizzetta-margherita-pizza-su-x.jpg" alt="Margherita" loading="lazy">
+          </div>
+          <div class="answer-label">Margherita</div>
+        </div>
+        <div class="answer-card" id="pizza-1">
+          <div class="answer-img-wrap">
+            <img src="https://tmbidigitalassetsazure.blob.core.windows.net/rms3-prod/attachments/37/1200x1200/Grilled-Veggie-Pizza_EXPS_LSBZ18_48960_D01_18_6b.jpg" alt="Veggie" loading="lazy">
+          </div>
+          <div class="answer-label">Veggie</div>
+        </div>
+        <div class="answer-card" id="pizza-2">
+          <div class="answer-img-wrap">
+            <img src="https://d332juqdd9b8hn.cloudfront.net/wp-content/uploads/2019/07/GettyImages-487260560.jpg" alt="Pineapple" loading="lazy">
+          </div>
+          <div class="answer-label">Pineapple</div>
+        </div>
+        <div class="answer-card" id="pizza-3">
+          <div class="answer-img-wrap">
+            <img src="https://yeadonpizza.com/wp-content/uploads/2020/08/plain-pizza.jpg" alt="Plain" loading="lazy">
+          </div>
+          <div class="answer-label">Plain</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q4: House -->
+    <section class="question" id="q-house">
+      <div class="question-header">
+        <span class="q-number">4</span>
+        <h2 class="question-title">Pick your dream house</h2>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-card" id="house-0">
+          <div class="answer-img-wrap">
+            <img src="https://nationalmortgageprofessional.com/sites/default/files/2015-04/ThinkstockPhotos-176836910_0.jpg" alt="Farm House" loading="lazy">
+          </div>
+          <div class="answer-label">Farm House</div>
+        </div>
+        <div class="answer-card" id="house-1">
+          <div class="answer-img-wrap">
+            <img src="https://empire-s3-production.bobvila.com/slides/35863/vertical_slide_wide/tiny_new_york_apartments.jpg?1581523935" alt="City Apartment" loading="lazy">
+          </div>
+          <div class="answer-label">City Apartment</div>
+        </div>
+        <div class="answer-card" id="house-2">
+          <div class="answer-img-wrap">
+            <img src="https://architecturesstyle.com/wp-content/uploads/2021/01/suburban-house-ideas-9.jpeg" alt="Suburban House" loading="lazy">
+          </div>
+          <div class="answer-label">Suburban House</div>
+        </div>
+        <div class="answer-card" id="house-3">
+          <div class="answer-img-wrap">
+            <img src="https://media-cldnry.s-nbcnews.com/image/upload/newscms/2021_16/3466983/210422-florida-wedding-mb-1802.jpg" alt="Mansion" loading="lazy">
+          </div>
+          <div class="answer-label">Mansion</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q5: Fruit -->
+    <section class="question" id="q-fruit">
+      <div class="question-header">
+        <span class="q-number">5</span>
+        <h2 class="question-title">Pick a favorite fruit</h2>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-card" id="fruit-0">
+          <div class="answer-img-wrap">
+            <img src="https://www.nipponexpress.com/press/report/img/06-Nov-20-ogp.jpeg" alt="Banana" loading="lazy">
+          </div>
+          <div class="answer-label">Banana</div>
+        </div>
+        <div class="answer-card" id="fruit-1">
+          <div class="answer-img-wrap">
+            <img src="https://assets.bonappetit.com/photos/5cfa7e1fdf8e95e1e62ca6a3/5:4/w_3515,h_2812,c_limit/Basically-Strawberry-Shortcake-Strawberries.jpg" alt="Strawberry" loading="lazy">
+          </div>
+          <div class="answer-label">Strawberry</div>
+        </div>
+        <div class="answer-card" id="fruit-2">
+          <div class="answer-img-wrap">
+            <img src="https://i0.wp.com/www.streetsmartkitchen.com/wp-content/uploads/Red-apples.jpg?resize=790%2C593&ssl=1" alt="Apple" loading="lazy">
+          </div>
+          <div class="answer-label">Apple</div>
+        </div>
+        <div class="answer-card" id="fruit-3">
+          <div class="answer-img-wrap">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5Fn-c5lOWe8xWpwkQ8Kw3C3RF01fc-KXOug&usqp=CAU" alt="Mango" loading="lazy">
+          </div>
+          <div class="answer-label">Mango</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q6: Activity -->
+    <section class="question" id="q-activity">
+      <div class="question-header">
+        <span class="q-number">6</span>
+        <h2 class="question-title">Pick a favorite activity</h2>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-card" id="activity-0">
+          <div class="answer-img-wrap">
+            <img src="https://a.cdn-hotels.com/gdcs/production179/d586/cc1389d9-c3fd-40db-bbd7-29687b844fa9.jpg" alt="Mall with Friends" loading="lazy">
+          </div>
+          <div class="answer-label">Mall with Friends</div>
+        </div>
+        <div class="answer-card" id="activity-1">
+          <div class="answer-img-wrap">
+            <img src="https://www.filmink.com.au/wp-content/uploads/2019/07/netflix-4011345_1280-793x528.jpg" alt="Binge Watching" loading="lazy">
+          </div>
+          <div class="answer-label">Binge Watching</div>
+        </div>
+        <div class="answer-card" id="activity-2">
+          <div class="answer-img-wrap">
+            <img src="https://newsela.imgix.net/article_media/2020/03/board-games-coronavirus-b59be246.jpg?auto=compress&fit=crop&ar=16:9&q=60" alt="Gaming" loading="lazy">
+          </div>
+          <div class="answer-label">Gaming</div>
+        </div>
+        <div class="answer-card" id="activity-3">
+          <div class="answer-img-wrap">
+            <img src="https://s3.amazonaws.com/zenplannerwordpress-stack0/wp-content/uploads/sites/598/2022/01/26072906/female-rhapsody-fitness-member-focuses-wod.jpg" alt="Gym" loading="lazy">
+          </div>
+          <div class="answer-label">Gym</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Q7: Comic -->
+    <section class="question" id="q-comic">
+      <div class="question-header">
+        <span class="q-number">7</span>
+        <h2 class="question-title">Pick a favorite comic book character</h2>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-card" id="comic-0">
+          <div class="answer-img-wrap">
+            <img src="https://cdn-images.win.gg/resize/w/1000/format/webp/type/progressive/fit/cover/path/wp/uploads/2022/07/marvels-spiderman-remastered-screenshot-01-disclaimer-en-01oct20.webp" alt="Spider-Man" loading="lazy">
+          </div>
+          <div class="answer-label">Spider-Man</div>
+        </div>
+        <div class="answer-card" id="comic-1">
+          <div class="answer-img-wrap">
+            <img src="https://static.wikia.nocookie.net/batman/images/d/d3/The_Batman_-_Batman.jpg" alt="Batman" loading="lazy">
+          </div>
+          <div class="answer-label">Batman</div>
+        </div>
+        <div class="answer-card" id="comic-2">
+          <div class="answer-img-wrap">
+            <img src="https://static.wikia.nocookie.net/listofdeaths/images/1/14/Bucky_Barnes-Winter_Soldier.jpg" alt="The Winter Soldier" loading="lazy">
+          </div>
+          <div class="answer-label">The Winter Soldier</div>
+        </div>
+        <div class="answer-card" id="comic-3">
+          <div class="answer-img-wrap">
+            <img src="https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg" alt="Iron Man" loading="lazy">
+          </div>
+          <div class="answer-label">Iron Man</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Result: Philosopher (logical + introvert) ===== -->
+  <div id="logical-introvert" class="result-section">
+    <div class="result-card">
+      <div class="result-image-wrap">
+        <img src="https://images.theconversation.com/files/257265/original/file-20190205-86202-19tymqj.jpg" alt="The Philosopher">
+      </div>
+      <div class="result-body">
+        <div class="result-badge">Your Personality Type</div>
+        <h2 class="result-title">The Philosopher</h2>
+        <p class="result-description">
+          You think before you speak, prefer depth over breadth, and find meaning in
+          solitude. Your sharp analytical mind and introspective nature make you a natural
+          problem-solver who sees the world through a uniquely thoughtful lens.
+        </p>
+        <p class="traits-title">Core Traits</p>
+        <div class="traits-list">
+          <span class="trait-pill">Analytical</span>
+          <span class="trait-pill">Thoughtful</span>
+          <span class="trait-pill">Independent</span>
+          <span class="trait-pill">Deep Thinker</span>
+          <span class="trait-pill">Reserved</span>
+        </div>
+        <div class="famous-section">
+          <p class="famous-title">You might share traits with</p>
+          <p class="famous-names">Albert Einstein &middot; Marie Curie &middot; Isaac Newton</p>
+        </div>
+        <div class="result-actions">
+          <button class="share-btn" data-type="The Philosopher">Share Result</button>
+          <button class="retake-btn" onclick="location.reload()">Retake Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Result: Group Leader (logical + extrovert) ===== -->
+  <div id="logical-extrovert" class="result-section">
+    <div class="result-card">
+      <div class="result-image-wrap">
+        <img src="https://img.etimg.com/thumb/msid-66234375,width-640,resizemode-4,imgsize-203544/building-strong-relationships.jpg" alt="The Group Leader">
+      </div>
+      <div class="result-body">
+        <div class="result-badge">Your Personality Type</div>
+        <h2 class="result-title">The Group Leader</h2>
+        <p class="result-description">
+          You combine razor-sharp analytical thinking with natural charisma and energy.
+          People follow you because your decisions are grounded in logic and delivered with
+          confidence. You thrive where strategy meets action.
+        </p>
+        <p class="traits-title">Core Traits</p>
+        <div class="traits-list">
+          <span class="trait-pill">Strategic</span>
+          <span class="trait-pill">Decisive</span>
+          <span class="trait-pill">Charismatic</span>
+          <span class="trait-pill">Organized</span>
+          <span class="trait-pill">Driven</span>
+        </div>
+        <div class="famous-section">
+          <p class="famous-title">You might share traits with</p>
+          <p class="famous-names">Elon Musk &middot; Angela Merkel &middot; Barack Obama</p>
+        </div>
+        <div class="result-actions">
+          <button class="share-btn" data-type="The Group Leader">Share Result</button>
+          <button class="retake-btn" onclick="location.reload()">Retake Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Result: Day Dreamer (creative + introvert) ===== -->
+  <div id="creative-introvert" class="result-section">
+    <div class="result-card">
+      <div class="result-image-wrap">
+        <img src="https://cdn.mos.cms.futurecdn.net/htCqa6jYJnEShpo8htHVDd-1200-80.jpg" alt="The Day Dreamer">
+      </div>
+      <div class="result-body">
+        <div class="result-badge">Your Personality Type</div>
+        <h2 class="result-title">The Day Dreamer</h2>
+        <p class="result-description">
+          Your inner world is rich and colorful. You see beauty where others don't and find
+          inspiration in quiet moments. Your imagination is your greatest superpower —
+          a true creative soul who turns daydreams into masterpieces.
+        </p>
+        <p class="traits-title">Core Traits</p>
+        <div class="traits-list">
+          <span class="trait-pill">Imaginative</span>
+          <span class="trait-pill">Sensitive</span>
+          <span class="trait-pill">Artistic</span>
+          <span class="trait-pill">Visionary</span>
+          <span class="trait-pill">Introspective</span>
+        </div>
+        <div class="famous-section">
+          <p class="famous-title">You might share traits with</p>
+          <p class="famous-names">Vincent van Gogh &middot; J.R.R. Tolkien &middot; Tim Burton</p>
+        </div>
+        <div class="result-actions">
+          <button class="share-btn" data-type="The Day Dreamer">Share Result</button>
+          <button class="retake-btn" onclick="location.reload()">Retake Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Result: Performing Artist (creative + extrovert) ===== -->
+  <div id="creative-extrovert" class="result-section">
+    <div class="result-card">
+      <div class="result-image-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Two_dancers.jpg/220px-Two_dancers.jpg" alt="The Performing Artist">
+      </div>
+      <div class="result-body">
+        <div class="result-badge">Your Personality Type</div>
+        <h2 class="result-title">The Performing Artist</h2>
+        <p class="result-description">
+          You light up every room you enter. Your creativity flows outward and you thrive when
+          sharing your gifts with the world. Spontaneous, magnetic, and endlessly expressive —
+          you turn every moment into a stage.
+        </p>
+        <p class="traits-title">Core Traits</p>
+        <div class="traits-list">
+          <span class="trait-pill">Expressive</span>
+          <span class="trait-pill">Passionate</span>
+          <span class="trait-pill">Spontaneous</span>
+          <span class="trait-pill">Magnetic</span>
+          <span class="trait-pill">Bold</span>
+        </div>
+        <div class="famous-section">
+          <p class="famous-title">You might share traits with</p>
+          <p class="famous-names">Freddie Mercury &middot; Lady Gaga &middot; Will Smith</p>
+        </div>
+        <div class="result-actions">
+          <button class="share-btn" data-type="The Performing Artist">Share Result</button>
+          <button class="retake-btn" onclick="location.reload()">Retake Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="quiz-footer">Thanks for playing! ✨</footer>
+
+  <script src="script.js" defer></script>
+</body>
 </html>

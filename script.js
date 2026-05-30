@@ -1,211 +1,176 @@
-console.log("script running");
-
-// Accessing the blue figure using the class "card-image"
-let picture = document.querySelector(".card-image");
-
-console.log(picture.id); // Prints the id of "picture"
-
-// Accessing all of the figures/pictures on the site using the class "card-image"
-
-let pictures = document.querySelectorAll(".card-image");
-
-pictures.forEach((picture) => console.log(picture.id)); // Prints the ids of all the elements stored in the "pictures" array
-
-// This object holds arrays for each section/question of the quiz. The indices of each array correspond to the picture clicked on the website.
-
-let quizValues = {
-  "color": ["logical", "creative", "logical", "creative"],
-  "vacation": ["extrovert", "introvert", "extrovert", "introvert"],
-  "pizza": ["creative", "logical", "creative", "logical"],
-  "house": ["introvert", "extrovert", "introvert", "extrovert"],
-  "fruit": ["logical", "creative", "logical", "creative"],
-  "activity": ["extrovert", "introvert", "extrovert", "introvert"],
-  "comic": ["extrovert", "introvert", "introvert", "extrovert"]
+const quizValues = {
+  color:    ["logical",   "creative",  "logical",   "creative"],
+  vacation: ["extrovert", "introvert", "extrovert", "introvert"],
+  pizza:    ["creative",  "logical",   "creative",  "logical"],
+  house:    ["introvert", "extrovert", "introvert", "extrovert"],
+  fruit:    ["logical",   "creative",  "logical",   "creative"],
+  activity: ["extrovert", "introvert", "extrovert", "introvert"],
+  comic:    ["extrovert", "introvert", "introvert", "extrovert"],
 };
 
-// This object keeps track of the points a user gets for a certain category based on their choices on the website.
+const quizTaker = { logical: 0, creative: 0, extrovert: 0, introvert: 0 };
+let answeredCount = 0;
 
-let quizTaker = {
-  logical: 0,
-  creative: 0,
-  extrovert: 0,
-  introvert: 0,
-};
+const progressFill  = document.getElementById("progress-fill");
+const currentQLabel = document.getElementById("current-q");
+const progressPct   = document.getElementById("progress-pct");
+const dots          = document.querySelectorAll(".step-dot");
 
-// This variable holds an array of all the elements in the HTML that have the class name "otherQ"
+function updateProgress() {
+  const pct = Math.round((answeredCount / 7) * 100);
+  progressFill.style.width = pct + "%";
+  currentQLabel.textContent = Math.min(answeredCount + 1, 7);
+  progressPct.textContent   = pct + "%";
 
-let hideIt = document.querySelectorAll(".otherQ");
+  dots.forEach((dot, i) => {
+    dot.classList.remove("active", "completed");
+    if (i < answeredCount)       dot.classList.add("completed");
+    else if (i === answeredCount) dot.classList.add("active");
+  });
+}
 
-// This for-loop goes through each element in the "hideIt" array and hides those sections on the site.
+updateProgress();
 
-for (let hide of hideIt) {
-  hide.classList.toggle("hidden");
-};
+function handleAnswer(card) {
+  const [questionKey, indexStr] = card.id.split("-");
+  const index = parseInt(indexStr);
+  const questionSection = card.closest(".question");
+  const siblingCards    = questionSection.querySelectorAll(".answer-card");
 
-// This object holds each image's id on the site. The indices of each array correspond to the image clicked on the site.
+  card.classList.add("selected");
+  siblingCards.forEach(c => { if (c !== card) c.classList.add("dimmed"); });
 
-let hideOthers = {
-  colors: ["color-0", "color-1", "color-2", "color-3"],
-  vacations: ["vacation-0", "vacation-1", "vacation-2", "vacation-3"],
-  pizzas: ["pizza-0", "pizza-1", "pizza-2", "pizza-3"],
-  houses: ["house-0", "house-1", "house-2", "house-3"],
-  fruits: ["fruit-0", "fruit-1", "fruit-2", "fruit-3"],
-  activities: ["activity-0", "activity-1", "activity-2", "activity-3"],
-  comics: ["comic-0", "comic-1", "comic-2", "comic-3"]
-};
+  quizTaker[quizValues[questionKey][index]]++;
+  answeredCount++;
+  updateProgress();
 
-// This for-loop goes through each element in the "pictures" array and adds an event listener for each image on the site.
+  setTimeout(() => {
+    if (questionKey === "comic") {
+      showResult();
+    } else {
+      advanceToNext(questionSection);
+    }
+  }, 700);
+}
 
+function advanceToNext(currentSection) {
+  const allQuestions = document.querySelectorAll(".question");
+  const idx  = Array.from(allQuestions).indexOf(currentSection);
+  const next = allQuestions[idx + 1];
+  if (!next) return;
 
-pictures.forEach((picture) => {
-  picture.addEventListener("click", (event) => {
-    
-    // When the user clicks an image, they are asked if they are sure that is their answer for that section of the quiz.
-    
-    if (confirm("Are you sure you want this to be your answer? (OK for yes and Cancel for no)") === true) {
+  currentSection.classList.remove("active");
+  next.classList.add("active");
 
-      // Save the user's choice in the variable "choice" which is an array (0th index holds the name of the section that they were choosing an answer for and the 1st index holds the number corresponding to that image clicked on the site).
+  document.getElementById("quiz-container").scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
-      let choice = picture.id.split("-");
+function showResult() {
+  const progressSection = document.getElementById("progress-section");
+  const quizContainer   = document.getElementById("quiz-container");
 
+  progressFill.style.width = "100%";
+  progressPct.textContent  = "100%";
 
-      console.log(choice); // Prints the "choice" array to the console
+  let resultId  = quizTaker.logical   > quizTaker.creative  ? "logical-"   : "creative-";
+  resultId     += quizTaker.introvert > quizTaker.extrovert ? "introvert"  : "extrovert";
 
-      // Changes the background to yellow for the picture that is clicked on the site, signaling that the user chose that option.
+  const resultEl = document.getElementById(resultId);
 
-      picture.classList.remove("has-background-light");
-      picture.classList.add("has-background-warning");
+  progressSection.style.transition = "opacity 0.45s ease";
+  progressSection.style.opacity    = "0";
 
-      // choice[0] refers to the property name of the picture and choice[1] refers to the index value of the array corresponding to that property
+  setTimeout(() => {
+    progressSection.style.display = "none";
+    quizContainer.style.transition = "opacity 0.45s ease";
+    quizContainer.style.opacity    = "0";
 
-      let answer = quizValues[choice[0]][choice[1]];
+    setTimeout(() => {
+      quizContainer.style.display = "none";
+      resultEl.classList.add("visible");
+      resultEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      launchConfetti();
+    }, 450);
+  }, 450);
+}
 
-      console.log(answer); // Prints the "answer" variable to the console
+// ── Confetti ──────────────────────────────────────────────────────────────────
 
-      // Adds 1 to the category that corresponds with the user's choice on the site.
+function launchConfetti() {
+  const canvas = document.getElementById("confetti-canvas");
+  const ctx    = canvas.getContext("2d");
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-      quizTaker[answer]++;
+  const colors   = ["#7c3aed","#a78bfa","#6366f1","#c4b5fd","#f59e0b","#10b981","#ec4899","#f472b6"];
+  const particles = Array.from({ length: 160 }, () => ({
+    x:             Math.random() * canvas.width,
+    y:             -20 - Math.random() * 80,
+    w:             Math.random() * 10 + 4,
+    h:             Math.random() * 6  + 3,
+    color:         colors[Math.floor(Math.random() * colors.length)],
+    vx:            (Math.random() - 0.5) * 4.5,
+    vy:            Math.random() * 3.5 + 1.5,
+    rotation:      Math.random() * 360,
+    rotSpeed:      (Math.random() - 0.5) * 7,
+    opacity:       1,
+  }));
 
-      console.log(quizTaker); // Prints the "quizTaker" object to the console
+  let frame = 0;
 
-      // If the user's choice for the picture that they clicked on the site is equal to "color", then a for-loop will go through every other picture in that row and hide it by adding "is-hidden" to the classList of the elements with the ids that correspond to the color figures on the site.
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (choice[0] === "color") {
-        for (let i = 0; i < quizValues.color.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.colors[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.colors[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        // Unhides the next section/question on the site
-        hideIt[0].classList.toggle("hidden");
-      };
+    particles.forEach(p => {
+      p.x        += p.vx;
+      p.y        += p.vy;
+      p.vy       += 0.06;
+      p.rotation += p.rotSpeed;
+      if (p.y > canvas.height * 0.75) p.opacity -= 0.018;
 
-      // The if-statements below do the same thing as the if-statement above for every other section of the site.
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
 
-      if (choice[0] === "vacation") {
-        for (let i = 0; i < quizValues.vacation.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.vacations[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.vacations[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        hideIt[1].classList.toggle("hidden");
-      };
+    frame++;
+    if (frame < 200) requestAnimationFrame(animate);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 
-      if (choice[0] === "pizza") {
-        for (let i = 0; i < quizValues.pizza.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.pizzas[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.pizzas[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        hideIt[2].classList.toggle("hidden");
-      };
+  animate();
+}
 
-      if (choice[0] === "house") {
-        for (let i = 0; i < quizValues.house.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.houses[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.houses[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        hideIt[3].classList.toggle("hidden");
-      };
+// ── Share button ──────────────────────────────────────────────────────────────
 
-      if (choice[0] === "fruit") {
-        for (let i = 0; i < quizValues.fruit.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.fruits[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.fruits[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        hideIt[4].classList.toggle("hidden");
-      };
+document.querySelectorAll(".share-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const type = btn.dataset.type;
+    const text = `I just took the Fuzzy Personality Quiz and I'm "${type}"! What are you? 🧠✨`;
 
-      if (choice[0] === "activity") {
-        for (let i = 0; i < quizValues.activity.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.activities[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.activities[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        hideIt[5].classList.toggle("hidden");
-      };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = "Copied! ✓";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "Share Result";
+          btn.classList.remove("copied");
+        }, 2200);
+      });
+    }
+  });
+});
 
-      // If the user's choice equals "comic", then that means that they've answered the last question of the personality quiz.
+// ── Answer click listeners ────────────────────────────────────────────────────
 
-      if (choice[0] === "comic") {
-        for (let i = 0; i < quizValues.comic.length; i++) {
-          if (i != choice[1]) {
-            document.getElementById(hideOthers.comics[i]).classList.add("is-hidden");
-          }
-          else {
-            document.getElementById(hideOthers.comics[i]).setAttribute("style", "pointer-events: none;")
-          };
-        };
-        let resultID; // Declares the variable "resultID" which will have data stored in it later
-
-        // Compares the values of each property in the "quizTaker" object, and depending on which property is greater, the following ids are stored in the variable "resultID".
-
-        if (quizTaker.logical > quizTaker.creative) {
-          resultID = "#logical-";
-        } else {
-          resultID = "#creative-";
-        }
-
-        if (quizTaker.introvert > quizTaker.extrovert) {
-
-          // The += completes the full name of the id by adding either extrovert or introvert to the id, depending on whether the if-statement above is true or false.
-
-          resultID += "introvert";
-        } else {
-          resultID += "extrovert";
-        }
-
-        // Selects the element with the id stored in "resultID" and unhides the section of the HTML that shows the user their result of the personality quiz.
-
-        let result = document.querySelector(resultID);
-        console.log(result);
-        result.classList.toggle("hidden");
-
-        // The <button> element in the HTML is selected by locating it using the id #retake. The button is unhidden. If the user wants to retake the quiz, they simply click the button and the page refreshes.
-
-        let button = document.querySelector("#retake");
-        button.classList.remove("hidden");
-      };
-    };
+document.querySelectorAll(".answer-card").forEach(card => {
+  card.addEventListener("click", () => {
+    if (!card.classList.contains("selected") && !card.classList.contains("dimmed")) {
+      handleAnswer(card);
+    }
   });
 });
